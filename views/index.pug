@@ -1,0 +1,53 @@
+doctype html
+html
+  include includes/head.pug
+  body
+    .ohlssons-body
+        .header
+                .logo
+                    a.logo.logo-link OHLSSONS BIL
+                div
+                    p.welcome-text Välkommen till ohlssons dagsuthyrning av bilar! Välj vilket datum du vill hyra bil nedan!
+        .product
+            form#form1(method="post")
+              input(id="dateSelect" type="date", name="valtDatum", onChange="dd(this.value)")
+              button#dateBtn(value=valtDatum, onClick="sendButton()") Hitta lediga bilar
+              div.listofcars
+                p.headline= "TILLGÄNGLIGA BILAR"
+                            div#carList
+                                each car in carList
+                                    ul(className="row" data-id=car._id)
+                                        figure
+                                            img(src=car.imgLink width="" height="")
+                                        section
+                                            input#eachcarDate(type="hidden", name="eachcarDate", value=datum)
+                                            li= "Typ: "
+                                                span.inputjs= car.fordonstyp
+                                            li= "Märke: "
+                                                span.inputjs= car.brand + " "+ car.model
+                                            li= "Körkort: "
+                                                span.inputjs= car.requiredDrivingLicense
+                                            li= "År: "
+                                                span.inputjs= car.year
+                                            li= "Växellåda: "
+                                                span.inputjs= car.gearbox
+                                            li= "Kostnad: "
+                                                span.inputjs= car.dagshyra + "kr/dag"
+                                            li= "Kommentarer: "
+                                                span.inputjs= car.kommentarer
+                                        button.bookBtn.eachCar BOKA
+        script(type='text/javascript').
+            function dd(value) {
+            console.log(value);
+            } 
+            function bookCar (){
+                console.log("bokadebilen");
+            }
+            /*sparar datumet i localstorage, iom att sidan
+            laddas om så att vi kan använda den till boka-knappen*/
+            function sendButton(){
+            var inputDate = document.getElementById("dateSelect").value;
+            localStorage.setItem("serverDate", inputDate);
+            console.log(inputDate);
+            }
+        script(src="./pickdate.js")
